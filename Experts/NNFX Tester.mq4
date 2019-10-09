@@ -1,8 +1,12 @@
 //+------------------------------------------------------------------+
-//|                                                       nnfxEa.mq4 |
-//|                                          Copyright © 2019, Deyan |
+//|                                                   NNFX_V1.00.mq4 |
+//|                                      Copyright 2019, DAsolutions |
+//|                                           http://dasolutions.org |
 //+------------------------------------------------------------------+
-#property copyright "Copyright © 2019, Deyan."
+#property copyright "Copyright 2019, DAsolutions"
+#property link      "http://dasolutions.org"
+#property version   "1.00"
+#property strict
 
 #define MAGICMA  888
 
