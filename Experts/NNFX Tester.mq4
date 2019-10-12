@@ -19,6 +19,8 @@ extern double  MinimumLotSize = 0.1;
 extern bool    RiskManagement = false;
 extern double  Risk = 0.02;
 
+extern int     OptimizationStage = 1;
+
 extern double  ATR_TP_Multiplier = 1.3;
 extern double  ATR_SL_Multiplier = 0.9;
 extern int     ATR_Period = 6;
@@ -89,20 +91,32 @@ void OnTick()
 //+------------------------------------------------------------------+
 int getSignal()
   {
-   if(
-      confirmationSignal() == _SELL
-      && secondConfirmationSignal() == _SELL
-      && checkVolume()
-   )
+   if(OptimizationStage == 1 && confirmationSignal() == _SELL)
      {
       return _SELL;
      }
 
-   if(
-      confirmationSignal() == _BUY
-      && secondConfirmationSignal() == _BUY
-      && checkVolume()
-   )
+   if(OptimizationStage == 2 && confirmationSignal() == _SELL && secondConfirmationSignal() == _SELL)
+     {
+      return _SELL;
+     }
+
+   if(OptimizationStage == 3 && confirmationSignal() == _SELL && secondConfirmationSignal() == _SELL && checkVolume())
+     {
+      return _SELL;
+     }
+
+   if(OptimizationStage == 1 && confirmationSignal() == _BUY)
+     {
+      return _BUY;
+     }
+
+   if(OptimizationStage == 2 && confirmationSignal() == _BUY && secondConfirmationSignal() == _BUY)
+     {
+      return _BUY;
+     }
+
+   if(OptimizationStage == 3 && confirmationSignal() == _BUY && secondConfirmationSignal() == _BUY && checkVolume())
      {
       return _BUY;
      }
@@ -315,6 +329,21 @@ void preferredSettings()
 
          CMF_Period = 13;
          CMF_Min = 0.06;
+
+         ADX_Period = 19;
+         Volume_Min = 12;
+        }
+
+      if((Symbol() == "AUDCHF") || (Symbol() == "AUDCHFmicro"))
+        {
+         ATR_TP_Multiplier = 2.9;
+         ATR_SL_Multiplier = 1.3;
+         ATR_Period = 7;
+
+         Aroon_Period = 16;
+
+         CMF_Period = 10;
+         CMF_Min = 0.04;
 
          ADX_Period = 19;
          Volume_Min = 12;
