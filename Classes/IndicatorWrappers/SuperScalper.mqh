@@ -10,7 +10,7 @@ private:
    int               _offset;
 
 public:
-   void              SuperScalper(int timeframe = 0, int offset = 0)
+   void              SuperScalper(int timeframe = 0, int offset = 1)
      {
       this._timeframe = timeframe;
       this._offset = offset;
@@ -23,8 +23,8 @@ public:
 
    int               GetSignal()
      {
-      double buffer_0 = iCustom(NULL, this._timeframe, "super-scalper", 0, this._offset);
-      double buffer_2 = iCustom(NULL, this._timeframe, "super-scalper", 2, this._offset);
+      double buffer_0 = iCustom(NULL, this._timeframe, "Super Scalper", 0, this._offset);
+      double buffer_2 = iCustom(NULL, this._timeframe, "Super Scalper", 2, this._offset);
       
       if(buffer_0 != EMPTY_VALUE && buffer_0 > 0)
         {

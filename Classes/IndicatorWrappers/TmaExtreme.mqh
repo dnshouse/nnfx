@@ -10,7 +10,7 @@ private:
    int               _offset;
 
 public:
-   void              TmaExtreme(int timeframe = 0, int offset = 0)
+   void              TmaExtreme(int timeframe = 0, int offset = 1)
      {
       this._timeframe = timeframe;
       this._offset = offset;
@@ -23,12 +23,12 @@ public:
 
    int               GetSignal()
      {
-      double upperBand = iCustom(NULL, this._timeframe, "tma-extreme", 1, this._offset);
-      double lowerBand = iCustom(NULL, this._timeframe, "tma-extreme", 2, this._offset);
+      double upperBand = iCustom(NULL, this._timeframe, "Tma Extreme", 1, this._offset);
+      double lowerBand = iCustom(NULL, this._timeframe, "Tma Extreme", 2, this._offset);
       
-      double bull = iCustom(NULL, this._timeframe, "tma-extreme", 3, this._offset);
-      double bear = iCustom(NULL, this._timeframe, "tma-extreme", 4, this._offset);
-      double flat = iCustom(NULL, this._timeframe, "tma-extreme", 5, this._offset);
+      double bull = iCustom(NULL, this._timeframe, "Tma Extreme", 3, this._offset);
+      double bear = iCustom(NULL, this._timeframe, "Tma Extreme", 4, this._offset);
+      double flat = iCustom(NULL, this._timeframe, "Tma Extreme", 5, this._offset);
       
       if(Close[this._offset] < lowerBand)
         {

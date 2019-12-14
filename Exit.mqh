@@ -4,6 +4,7 @@
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
 #include "Classes/MoneyManagement.mqh"
+#include "Classes/IndicatorWrappers/SuperScalper.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -12,6 +13,7 @@ class Exit
   {
 private:
    MoneyManagement*  MoneyManagementInstance;
+   SuperScalper*     SuperScalperInstance_H4;
 
    int               _lastSignal;
    int               _currentSignal;
@@ -20,26 +22,25 @@ public:
    void              Exit()
      {
       MoneyManagementInstance = new MoneyManagement();
+      SuperScalperInstance_H4 = new SuperScalper(PERIOD_H4);
      };
 
    void             ~Exit()
      {
       delete(MoneyManagementInstance);
+      delete(SuperScalperInstance_H4);
      }
 
    void              Tick()
      {
-      //this._currentSignal = SomeInstance.GetSignal();
+      this._currentSignal = SuperScalperInstance_H4.GetSignal();
 
-      if(this._currentSignal > 0 && this._currentSignal != this._lastSignal)
+      if(this._currentSignal != this._lastSignal)
         {
          this.MoneyManagementInstance.CloseAll();
         }
 
-      if(this._currentSignal > 0)
-        {
-         this._lastSignal = this._currentSignal;
-        }
+      this._lastSignal = this._currentSignal;
      };
   };
 //+------------------------------------------------------------------+

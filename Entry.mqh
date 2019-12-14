@@ -5,8 +5,10 @@
 //+------------------------------------------------------------------+
 #include "Classes/Settings.mqh";
 #include "Classes/MoneyManagement.mqh"
-#include "Classes/IndicatorWrappers/TmaExtreme.mqh"
 #include "Classes/IndicatorWrappers/SuperScalper.mqh"
+
+#include "Classes/IndicatorWrappers/TmaExtreme.mqh"
+#include "Classes/IndicatorWrappers/AroonUpAndDown.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -16,70 +18,40 @@ class Entry
 private:
    Settings*         SettingsInstance;
    MoneyManagement*  MoneyManagementInstance;
-   
-   TmaExtreme*       TmaExtremeInstance;
-   SuperScalper*     SuperScalperInstance;
+   SuperScalper*     SuperScalperInstance_H4;
+   SuperScalper*     SuperScalperInstance_D1;
 
    int               _lastSignal;
    int               _currentSignal;
-   int               _optimizationStage;
 
 public:
    void              Entry()
      {
       SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
-      
-      TmaExtremeInstance = new TmaExtreme();
-      SuperScalperInstance = new SuperScalper();
-      
-      this._optimizationStage = SettingsInstance._OptimizationStage;
+      SuperScalperInstance_H4 = new SuperScalper(PERIOD_H4, SettingsInstance._IndicatorsOffset);
+      SuperScalperInstance_D1 = new SuperScalper(PERIOD_D1, SettingsInstance._IndicatorsOffset);
      };
 
    void             ~Entry()
      {
       delete(SettingsInstance);
       delete(MoneyManagementInstance);
-      
-      delete(TmaExtremeInstance);
-      delete(SuperScalperInstance);
+      delete(SuperScalperInstance_H4);
+      delete(SuperScalperInstance_D1);
      }
 
    void               Tick()
      {
-      this._currentSignal = this.GetSignal();
-
-      if(this._currentSignal == this._lastSignal)
-        {
-         return;
-        }
-
-      if(this._currentSignal == _SELL)
+      if(OrdersTotal() == 0 && SuperScalperInstance_D1.GetSignal() == _SELL && SuperScalperInstance_H4.GetSignal() == _SELL)
         {
          MoneyManagementInstance.Sell();
         }
 
-      if(this._currentSignal == _BUY)
+      if(OrdersTotal() == 0 && SuperScalperInstance_D1.GetSignal() == _BUY && SuperScalperInstance_H4.GetSignal() == _BUY)
         {
          MoneyManagementInstance.Buy();
         }
-
-      this._lastSignal = this._currentSignal;
      };
-
-   int               GetSignal()
-     {
-      if(this._optimizationStage == 1 && TmaExtremeInstance.GetSignal() == _SELL)
-        {
-         return _SELL;
-        }
-
-      if(this._optimizationStage == 1 && TmaExtremeInstance.GetSignal() == _BUY)
-        {
-         return _BUY;
-        }
-
-      return 0;
-     }
   };
 //+------------------------------------------------------------------+

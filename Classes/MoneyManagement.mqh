@@ -31,7 +31,7 @@ public:
       this._MinimumLotSize = settings._MinimumLotSize;
 
       this._TPMultiplier = settings._TP_Multiplier;
-      this._SLMultiplier = settings._TP_Multiplier * settings._SL_Multiplier;
+      this._SLMultiplier = settings._SL_Multiplier;
 
       this._ATRTimeframe = settings._IndicatorsTimeframe;
       this._ATRPeriod = 14;
