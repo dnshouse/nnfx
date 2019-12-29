@@ -1,14 +1,14 @@
 //+------------------------------------------------------------------+
-//|                                                   NNFX V1.30.mq4 |
+//|                                                             NNFX |
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
-#include "Classes/Settings.mqh";
+#include "Classes/Settings.mqh"
 #include "Classes/MoneyManagement.mqh"
-#include "Classes/IndicatorWrappers/SuperScalper.mqh"
 
-#include "Classes/IndicatorWrappers/TmaExtreme.mqh"
+#include "Classes/IndicatorWrappers/SuperScalper.mqh"
 #include "Classes/IndicatorWrappers/AroonUpAndDown.mqh"
+#include "Classes/IndicatorWrappers/TmaExtreme.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -18,8 +18,7 @@ class Entry
 private:
    Settings*         SettingsInstance;
    MoneyManagement*  MoneyManagementInstance;
-   SuperScalper*     SuperScalperInstance_H4;
-   SuperScalper*     SuperScalperInstance_D1;
+   AroonUpAndDown*   AroonUpAndDownInstance;
 
    int               _lastSignal;
    int               _currentSignal;
@@ -29,29 +28,41 @@ public:
      {
       SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
-      SuperScalperInstance_H4 = new SuperScalper(PERIOD_H4, SettingsInstance._IndicatorsOffset);
-      SuperScalperInstance_D1 = new SuperScalper(PERIOD_D1, SettingsInstance._IndicatorsOffset);
-     };
+      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe);
+     }
 
    void             ~Entry()
      {
       delete(SettingsInstance);
       delete(MoneyManagementInstance);
-      delete(SuperScalperInstance_H4);
-      delete(SuperScalperInstance_D1);
+      delete(AroonUpAndDownInstance);
      }
 
    void               Tick()
      {
-      if(OrdersTotal() == 0 && SuperScalperInstance_D1.GetSignal() == _SELL && SuperScalperInstance_H4.GetSignal() == _SELL)
+      if(OrdersTotal() == 0 && this.GetSignal() == _SELL)
         {
          MoneyManagementInstance.Sell();
         }
 
-      if(OrdersTotal() == 0 && SuperScalperInstance_D1.GetSignal() == _BUY && SuperScalperInstance_H4.GetSignal() == _BUY)
+      if(OrdersTotal() == 0 && this.GetSignal() == _BUY)
         {
          MoneyManagementInstance.Buy();
         }
-     };
+     }
+
+   int               GetSignal()
+     {
+      this._currentSignal = AroonUpAndDownInstance.GetSignal();
+
+      if(this._currentSignal != this._lastSignal)
+        {
+         return this._currentSignal;
+        }
+
+      this._lastSignal = this._currentSignal;
+
+      return 0;
+     }
   };
 //+------------------------------------------------------------------+

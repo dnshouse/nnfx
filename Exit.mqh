@@ -1,10 +1,11 @@
 //+------------------------------------------------------------------+
-//|                                                   NNFX V1.30.mq4 |
+//|                                                             NNFX |
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
+#include "Classes/Settings.mqh"
 #include "Classes/MoneyManagement.mqh"
-#include "Classes/IndicatorWrappers/SuperScalper.mqh"
+#include "Classes/IndicatorWrappers/AroonUpAndDown.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -12,8 +13,9 @@
 class Exit
   {
 private:
+   Settings*         SettingsInstance;
    MoneyManagement*  MoneyManagementInstance;
-   SuperScalper*     SuperScalperInstance_H4;
+   AroonUpAndDown*   AroonUpAndDownInstance;
 
    int               _lastSignal;
    int               _currentSignal;
@@ -21,19 +23,21 @@ private:
 public:
    void              Exit()
      {
+      SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
-      SuperScalperInstance_H4 = new SuperScalper(PERIOD_H4);
-     };
+      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe);
+     }
 
    void             ~Exit()
      {
+      delete(SettingsInstance);
       delete(MoneyManagementInstance);
-      delete(SuperScalperInstance_H4);
+      delete(AroonUpAndDownInstance);
      }
 
    void              Tick()
      {
-      this._currentSignal = SuperScalperInstance_H4.GetSignal();
+      this._currentSignal = AroonUpAndDownInstance.GetSignal();
 
       if(this._currentSignal != this._lastSignal)
         {
@@ -41,6 +45,6 @@ public:
         }
 
       this._lastSignal = this._currentSignal;
-     };
+     }
   };
 //+------------------------------------------------------------------+

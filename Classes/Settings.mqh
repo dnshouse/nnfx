@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                                   NNFX V1.30.mq4 |
+//|                                                             NNFX |
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
@@ -7,11 +7,11 @@ extern bool    PrefSettings = true;
 
 extern double  Risk = 0.01;
 extern bool    RiskManagement = true;
-extern double  MinimumLotSize = 0.01;
+extern double  MinimumLotSize = 0.1;
 
 extern int              OptimizationStage = 1;
 extern int              IndicatorsOffset = 1;
-extern ENUM_TIMEFRAMES  IndicatorsTimeframe = PERIOD_D1;
+extern ENUM_TIMEFRAMES  IndicatorsTimeframe = PERIOD_CURRENT; // PERIOD_D1
 
 extern double           TP_Multiplier = 0.5;
 extern double           SL_Multiplier = 0.5;
@@ -174,6 +174,6 @@ public:
       else
         {
         }
-     };
+     }
   };
 //+------------------------------------------------------------------+
