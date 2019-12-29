@@ -23,15 +23,15 @@ public:
 
    int               GetSignal()
      {
-      double bull = iCustom(NULL, this._timeframe, "Super Scalper", 0, this._offset);
-      double bear = iCustom(NULL, this._timeframe, "Super Scalper", 2, this._offset);
+      double bulls = iCustom(NULL, this._timeframe, "Super Scalper", 0, this._offset);
+      double bears = iCustom(NULL, this._timeframe, "Super Scalper", 2, this._offset);
 
-      if(bull != EMPTY_VALUE && bull > 0)
+      if(bulls != EMPTY_VALUE && bulls > 0)
         {
          return _BUY;
         }
 
-      if(bear != EMPTY_VALUE && bear > 0)
+      if(bears != EMPTY_VALUE && bears > 0)
         {
          return _SELL;
         }
