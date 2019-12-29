@@ -25,17 +25,17 @@ public:
 
    int               GetSignal()
      {
-      double aroon_up_current = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 0, this._offset);
-      double aroon_down_current = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 1, this._offset);
+      double bulls = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 0, this._offset);
+      double bears = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 1, this._offset);
 
-      if(aroon_down_current > aroon_up_current)
-        {
-         return _SELL;
-        }
-
-      if(aroon_up_current > aroon_down_current)
+      if(bulls > bears)
         {
          return _BUY;
+        }
+
+      if(bears > bulls)
+        {
+         return _SELL;
         }
 
       return 0;
