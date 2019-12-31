@@ -3,21 +3,31 @@
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
-extern bool    PrefSettings = true;
+extern bool             PrefSettings = true;
 
-extern double  Risk = 0.01;
-extern bool    RiskManagement = true;
-extern double  MinimumLotSize = 0.1;
+sinput string           Risk_Label = ""; //Risk ------------------------------------------------------------------------------------
+extern bool             RiskManagement = true;
+extern double           MinimumLotSize = 0.1;
+extern double           Risk = 0.01;
 
-extern int              OptimizationStage = 1;
-extern int              IndicatorsOffset = 1;
-extern ENUM_TIMEFRAMES  IndicatorsTimeframe = PERIOD_CURRENT; // PERIOD_D1
-
-extern double           TP_Multiplier = 0.5;
+sinput string           ATR_Label = ""; //ATR ------------------------------------------------------------------------------------
+extern int              ATR_Period = 14;
 extern double           SL_Multiplier = 0.5;
-extern int              Baseline_Period = 4;
-extern int              Confirmation_Period = 4;
-extern int              Reversal_Period = 4;
+extern double           TP_Multiplier = 0.5;
+
+sinput string           Baseline_Label = ""; //Baseline ------------------------------------------------------------------------------------
+extern int              Baseline_Period = 21;
+extern double           Baseline_Levels = 0.00400;
+
+sinput string           ConfirmationIndicator_Label = ""; //Confirmation ------------------------------------------------------------------------------------
+extern int              ConfirmationIndicator_Period = 21;
+
+sinput string           SecondConfirmationIndicator_Label = ""; //2nd Confirmation ------------------------------------------------------------------------------------
+extern int              SecondConfirmationIndicator_Period = 21;
+
+sinput string           VolumeIndicator_Label = ""; //Volume ------------------------------------------------------------------------------------
+extern double           VolumeIndicator_MinimumVolume = 0.03;
+
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -25,20 +35,23 @@ extern int              Reversal_Period = 4;
 class Settings
   {
 public:
-   double            _Risk;
    bool              _RiskManagement;
    double            _MinimumLotSize;
+   double            _Risk;
 
-   int               _OptimizationStage;
+   int               _ATR_Period;
+   double            _SL_Multiplier;
+   double            _TP_Multiplier;
+
+   int               _Baseline_Period;
+   double            _Baseline_Levels;
+
+   int               _ConfirmationIndicator_Period;
+   int               _SecondConfirmationIndicator_Period;
+   double            _VolumeIndicator_MinimumVolume;
 
    int               _IndicatorsOffset;
    int               _IndicatorsTimeframe;
-
-   double            _TP_Multiplier;
-   double            _SL_Multiplier;
-   int               _Baseline_Period;
-   int               _Confirmation_Period;
-   int               _Reversal_Period;
 
    void              Settings()
      {
@@ -46,16 +59,19 @@ public:
       this._RiskManagement = RiskManagement;
       this._MinimumLotSize = MinimumLotSize;
 
-      this._IndicatorsOffset = IndicatorsOffset;
-      this._IndicatorsTimeframe = IndicatorsTimeframe;
-
-      this._Reversal_Period = Reversal_Period;
-
-      this._OptimizationStage = OptimizationStage;
+      this._ATR_Period = ATR_Period;
       this._TP_Multiplier = TP_Multiplier;
       this._SL_Multiplier = SL_Multiplier;
+
       this._Baseline_Period = Baseline_Period;
-      this._Confirmation_Period = Confirmation_Period;
+      this._Baseline_Levels = Baseline_Levels;
+
+      this._ConfirmationIndicator_Period = ConfirmationIndicator_Period;
+      this._SecondConfirmationIndicator_Period = SecondConfirmationIndicator_Period;
+      this._VolumeIndicator_MinimumVolume = VolumeIndicator_MinimumVolume;
+
+      this._IndicatorsTimeframe = PERIOD_CURRENT;
+      this._IndicatorsOffset = 1;
 
       if(PrefSettings == true)
         {
