@@ -11,33 +11,31 @@
 class MoneyManagement
   {
 private:
-   double            _Risk;
    bool              _RiskManagement;
    double            _MinimumLotSize;
+   double            _Risk;
 
-   double            _TPMultiplier;
-   double            _SLMultiplier;
    int               _ATRTimeframe;
-   int               _ATRPeriod;
    int               _ATROffset;
+   int               _ATRPeriod;
+   double            _SLMultiplier;
+   double            _TPMultiplier;
 
-   double            _ATRStatic;
 
 public:
    void              MoneyManagement()
      {
       Settings* settings = new Settings();
 
-      this._Risk = settings._Risk;
       this._RiskManagement = settings._RiskManagement;
       this._MinimumLotSize = settings._MinimumLotSize;
-
-      this._TPMultiplier = settings._TP_Multiplier;
-      this._SLMultiplier = settings._SL_Multiplier;
+      this._Risk = settings._Risk;
 
       this._ATRTimeframe = settings._IndicatorsTimeframe;
-      this._ATRPeriod = 14;
       this._ATROffset = settings._IndicatorsOffset;
+      this._ATRPeriod = settings._ATR_Period;
+      this._SLMultiplier = settings._SL_Multiplier;
+      this._TPMultiplier = settings._TP_Multiplier;
 
       delete(settings);
      }
