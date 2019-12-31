@@ -68,7 +68,10 @@ public:
       this._IndicatorsTimeframe = PERIOD_CURRENT;
       this._IndicatorsOffset = 1;
 
-      if(PrefSettings == true)
+      if(PrefSettings == false)
+        {
+        }
+      else
         {
          if((Symbol() == "AUDCAD") || (Symbol() == "AUDCADmicro"))
            {
@@ -181,9 +184,6 @@ public:
          if((Symbol() == "USDJPY") || (Symbol() == "USDJPYmicro"))
            {
            }
-        }
-      else
-        {
         }
      }
   };
