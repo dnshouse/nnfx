@@ -11,7 +11,7 @@ private:
    int               _period;
 
 public:
-   void              AroonUpAndDown(int timeframe = 0, int offset = 1, int period = 14)
+   void              AroonUpAndDown(int timeframe = 0, int offset = 1, int period = 8)
      {
       this._timeframe = timeframe;
       this._offset = offset;
@@ -23,10 +23,13 @@ public:
 
      }
 
-   int               GetSignal()
+   int               GetState(int offset = -1)
      {
-      double bulls = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 0, this._offset);
-      double bears = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 1, this._offset);
+      if(offset < 0)
+         offset = this._offset;
+
+      double bulls = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 0, offset);
+      double bears = iCustom(NULL, this._timeframe, "Aroon Up And Down", this._period, 1, offset);
 
       if(bulls > bears)
         {
@@ -36,6 +39,19 @@ public:
       if(bears > bulls)
         {
          return _SELL;
+        }
+
+      return 0;
+     }
+
+   int               GetSignal()
+     {
+      int currentSignal = this.GetState(this._offset);
+      int lastSignal = this.GetState(this._offset + 1);
+
+      if(currentSignal != lastSignal)
+        {
+         return currentSignal;
         }
 
       return 0;
