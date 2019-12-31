@@ -9,13 +9,15 @@ private:
    int               _timeframe;
    int               _offset;
    int               _period;
+   double            _levels;
 
 public:
-   void              ChaikinMoneyFlow(int timeframe = 0, int offset = 1, int period = 8)
+   void              ChaikinMoneyFlow(int timeframe = 0, int offset = 1, int period = 8, double levels = 0.03)
      {
       this._timeframe = timeframe;
       this._offset = offset;
       this._period = period;
+      this._levels = levels;
      }
 
    void             ~ChaikinMoneyFlow()
@@ -30,12 +32,12 @@ public:
 
       double level = iCustom(NULL, this._timeframe, "CMF", this._period, 0, offset);
 
-      if(level > 0)
+      if(level > level + this._levels)
         {
          return _BUY;
         }
 
-      if(level < 0)
+      if(level < level - this._levels)
         {
          return _SELL;
         }
