@@ -12,7 +12,6 @@ class MoneyManagement
   {
 private:
    bool              _RiskManagement;
-   double            _MinimumLotSize;
    double            _Risk;
 
    int               _ATRTimeframe;
@@ -21,14 +20,12 @@ private:
    double            _SLMultiplier;
    double            _TPMultiplier;
 
-
 public:
    void              MoneyManagement()
      {
       Settings* settings = new Settings();
 
       this._RiskManagement = settings._RiskManagement;
-      this._MinimumLotSize = settings._MinimumLotSize;
       this._Risk = settings._Risk;
 
       this._ATRTimeframe = settings._IndicatorsTimeframe;
@@ -43,24 +40,6 @@ public:
    void             ~MoneyManagement()
      {
 
-     }
-
-   double            LotSize()
-     {
-      double riskAmountPerPip = (AccountFreeMargin() * this._Risk) / ((iATR(NULL, this._ATRTimeframe, this._ATRPeriod, this._ATROffset) * this._SLMultiplier) / Point);
-      double lot = (riskAmountPerPip * (100000 / MarketInfo(Symbol(), MODE_TICKVALUE))) / 100000;
-
-      if(lot < this._MinimumLotSize)
-        {
-         lot = this._MinimumLotSize;
-        }
-
-      if(this._RiskManagement == true)
-        {
-         return lot;
-        }
-
-      return this._MinimumLotSize;
      }
 
    double            LongTP()
@@ -87,43 +66,47 @@ public:
       return sl;
      }
 
+   double            LotSize()
+     {
+      double riskAmountPerPip = (AccountFreeMargin() * this._Risk) / ((iATR(NULL, this._ATRTimeframe, this._ATRPeriod, this._ATROffset) * this._SLMultiplier) / Point);
+      double lot = (riskAmountPerPip * (MarketInfo(Symbol(), MODE_LOTSIZE) / MarketInfo(Symbol(), MODE_TICKVALUE))) / MarketInfo(Symbol(), MODE_LOTSIZE);
+      double minlot = MarketInfo(Symbol(), MODE_MINLOT);
+      double maxlot = MarketInfo(Symbol(), MODE_MAXLOT);
+
+      if(lot < minlot)
+         lot = minlot;
+
+      if(lot > maxlot)
+         lot = maxlot;
+
+      int lotDigits = 0;
+      if(MarketInfo(Symbol(), MODE_LOTSTEP) == 0.1)
+         lotDigits = 1;
+      if(MarketInfo(Symbol(), MODE_LOTSTEP) == 0.01)
+         lotDigits = 2;
+
+      return NormalizeDouble(lot, lotDigits);
+     }
+
    void              Sell()
      {
-      double lot = NormalizeDouble(LotSize(), 1);
       double tp = NormalizeDouble(ShortTP(), Digits);
       double sl = NormalizeDouble(ShortSL(), Digits);
 
-      //      Print("Lot : ", lot);
       //      Print("Tp : ", tp);
       //      Print("Sl : ", sl);
-      //      Print("Bid : ", Bid);
       //      Print("STOPLEVEL : ", MarketInfo(Symbol(), MODE_STOPLEVEL));
-      //      Print("LOTSIZE : ", MarketInfo(Symbol(), MODE_LOTSIZE));
-      //      Print("MINLOT : ", MarketInfo(Symbol(), MODE_MINLOT));
-      //      Print("LOTSTEP : ", MarketInfo(Symbol(), MODE_LOTSTEP));
-      //      Print("MAXLOT : ", MarketInfo(Symbol(), MODE_MAXLOT));
 
-      int order = OrderSend(Symbol(), OP_SELL, lot, Bid, 3, sl, tp, "Tester", MAGICMA, 0, Red);
+      int order = OrderSend(Symbol(), OP_SELL, LotSize(), Bid, 3, sl, tp, "Tester", MAGICMA, 0, Red);
       return;
      }
 
    void              Buy()
      {
-      double lot = NormalizeDouble(LotSize(), 1);
       double tp = NormalizeDouble(LongTP(), Digits);
       double sl = NormalizeDouble(LongSL(), Digits);
 
-      //      Print("Lot : ", lot);
-      //      Print("Tp : ", tp);
-      //      Print("Sl : ", sl);
-      //      Print("Bid : ", Bid);
-      //      Print("STOPLEVEL : ", MarketInfo(Symbol(), MODE_STOPLEVEL));
-      //      Print("LOTSIZE : ", MarketInfo(Symbol(), MODE_LOTSIZE));
-      //      Print("MINLOT : ", MarketInfo(Symbol(), MODE_MINLOT));
-      //      Print("LOTSTEP : ", MarketInfo(Symbol(), MODE_LOTSTEP));
-      //      Print("MAXLOT : ", MarketInfo(Symbol(), MODE_MAXLOT));
-
-      int order = OrderSend(Symbol(), OP_BUY, lot, Ask, 3, sl, tp, "Tester", MAGICMA, 0, Blue);
+      int order = OrderSend(Symbol(), OP_BUY, LotSize(), Ask, 3, sl, tp, "Tester", MAGICMA, 0, Blue);
       return;
      }
 
