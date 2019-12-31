@@ -32,12 +32,12 @@ public:
 
       double level = iCustom(NULL, this._timeframe, "CMF", this._period, 0, offset);
 
-      if(level > level + this._levels)
+      if(Ask > level + this._levels)
         {
          return _BUY;
         }
 
-      if(level < level - this._levels)
+      if(Bid < level - this._levels)
         {
          return _SELL;
         }
