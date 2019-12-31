@@ -3,7 +3,7 @@
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
-class CMF
+class ChaikinMoneyFlow
   {
 private:
    int               _timeframe;
@@ -11,14 +11,14 @@ private:
    int               _period;
 
 public:
-   void              CMF(int timeframe = 0, int offset = 1, int period = 8)
+   void              ChaikinMoneyFlow(int timeframe = 0, int offset = 1, int period = 8)
      {
       this._timeframe = timeframe;
       this._offset = offset;
       this._period = period;
      }
 
-   void             ~CMF()
+   void             ~ChaikinMoneyFlow()
      {
 
      }
