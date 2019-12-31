@@ -6,8 +6,10 @@
 #include "Classes/Settings.mqh"
 #include "Classes/MoneyManagement.mqh"
 
+#include "Classes/IndicatorWrappers/MovingAverage.mqh"
 #include "Classes/IndicatorWrappers/AroonUpAndDown.mqh"
-#include "Classes/IndicatorWrappers/CMF.mqh"
+#include "Classes/IndicatorWrappers/ChaikinMoneyFlow.mqh"
+#include "Classes/IndicatorWrappers/AbsoluteStrengthOscillator.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -15,14 +17,16 @@
 class Entry
   {
 private:
-   Settings*         SettingsInstance;
-   MoneyManagement*  MoneyManagementInstance;
+   Settings*                     SettingsInstance;
+   MoneyManagement*              MoneyManagementInstance;
 
-   AroonUpAndDown*   AroonUpAndDownInstance;
-   CMF*              CMFInstance;
+   MovingAverage*                MovingAverageInstance;
+   AroonUpAndDown*               AroonUpAndDownInstance;
+   ChaikinMoneyFlow*             ChaikinMoneyFlowInstance;
+   AbsoluteStrengthOscillator*   AbsoluteStrengthOscillatorInstance;
 
-   int               _lastSignal;
-   int               _currentSignal;
+   int                           _lastSignal;
+   int                           _currentSignal;
 
 public:
    void              Entry()
@@ -30,8 +34,10 @@ public:
       SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
 
-      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe);
-      CMFInstance = new CMF(SettingsInstance._IndicatorsTimeframe);
+      MovingAverageInstance = new MovingAverage(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._Baseline_Period, SettingsInstance._Baseline_Levels);
+      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._ConfirmationIndicator_Period);
+      ChaikinMoneyFlowInstance = new ChaikinMoneyFlow(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._SecondConfirmationIndicator_Period);
+      AbsoluteStrengthOscillatorInstance = new AbsoluteStrengthOscillator(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset);
      }
 
    void             ~Entry()
@@ -39,8 +45,10 @@ public:
       delete(SettingsInstance);
       delete(MoneyManagementInstance);
 
+      delete(MovingAverageInstance);
       delete(AroonUpAndDownInstance);
-      delete(CMFInstance);
+      delete(ChaikinMoneyFlowInstance);
+      delete(AbsoluteStrengthOscillatorInstance);
      }
 
    void               Tick()
@@ -49,14 +57,14 @@ public:
 
       if(this._currentSignal != this._lastSignal)
         {
-         if(OrdersTotal() == 0 && this._currentSignal == _SELL)
-           {
-            MoneyManagementInstance.Sell();
-           }
-
          if(OrdersTotal() == 0 && this._currentSignal == _BUY)
            {
             MoneyManagementInstance.Buy();
+           }
+
+         if(OrdersTotal() == 0 && this._currentSignal == _SELL)
+           {
+            MoneyManagementInstance.Sell();
            }
         }
 
@@ -65,12 +73,12 @@ public:
 
    int               GetSignal()
      {
-      if(AroonUpAndDownInstance.GetSignal() == _BUY && CMFInstance.GetSignal() == _BUY)
+      if(MovingAverageInstance.GetState() == _BUY && AroonUpAndDownInstance.GetSignal() == _BUY && ChaikinMoneyFlowInstance.GetState() == _BUY && AbsoluteStrengthOscillatorInstance.GetState() == _BUY)
         {
          return _BUY;
         }
 
-      if(AroonUpAndDownInstance.GetSignal() == _SELL && CMFInstance.GetSignal() == _SELL)
+      if(MovingAverageInstance.GetState() == _SELL && AroonUpAndDownInstance.GetSignal() == _SELL && ChaikinMoneyFlowInstance.GetState() == _SELL && AbsoluteStrengthOscillatorInstance.GetState() == _SELL)
         {
          return _SELL;
         }

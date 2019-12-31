@@ -5,7 +5,8 @@
 //+------------------------------------------------------------------+
 #include "Classes/Settings.mqh"
 #include "Classes/MoneyManagement.mqh"
-#include "Classes/IndicatorWrappers/AroonUpAndDown.mqh"
+
+#include "Classes/IndicatorWrappers/AbsoluteStrengthOscillator.mqh"
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -13,31 +14,31 @@
 class Exit
   {
 private:
-   Settings*         SettingsInstance;
-   MoneyManagement*  MoneyManagementInstance;
-   AroonUpAndDown*   AroonUpAndDownInstance;
+   Settings*                     SettingsInstance;
+   MoneyManagement*              MoneyManagementInstance;
+   AbsoluteStrengthOscillator*   AbsoluteStrengthOscillatorInstance;
 
-   int               _lastSignal;
-   int               _currentSignal;
+   int                           _lastSignal;
+   int                           _currentSignal;
 
 public:
    void              Exit()
      {
       SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
-      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe);
+      AbsoluteStrengthOscillatorInstance = new AbsoluteStrengthOscillator(SettingsInstance._IndicatorsTimeframe);
      }
 
    void             ~Exit()
      {
       delete(SettingsInstance);
       delete(MoneyManagementInstance);
-      delete(AroonUpAndDownInstance);
+      delete(AbsoluteStrengthOscillatorInstance);
      }
 
    void              Tick()
      {
-      this._currentSignal = AroonUpAndDownInstance.GetSignal();
+      this._currentSignal = AbsoluteStrengthOscillatorInstance.GetSignal();
 
       if(this._currentSignal != this._lastSignal)
         {

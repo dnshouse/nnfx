@@ -6,22 +6,22 @@
 #property strict
 
 #define MAGICMA   1111111111
-#define _SELL     1
-#define _BUY      2
+#define _BUY      1
+#define _SELL     2
 
-#include "Entry.mqh"
 #include "Exit.mqh"
+#include "Entry.mqh"
 
-Entry* EntryInstance;
 Exit* ExitInstance;
+Entry* EntryInstance;
 
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
 int OnInit()
   {
-   EntryInstance = new Entry();
    ExitInstance = new Exit();
+   EntryInstance = new Entry();
    return(INIT_SUCCEEDED);
   }
 //+------------------------------------------------------------------+
@@ -29,8 +29,8 @@ int OnInit()
 //+------------------------------------------------------------------+
 void OnDeinit(const int reason)
   {
-   delete(EntryInstance);
    delete(ExitInstance);
+   delete(EntryInstance);
   }
 //+------------------------------------------------------------------+
 //| Expert tick function                                             |
@@ -43,7 +43,7 @@ void OnTick()
    if(Volume[0] > 1)
       return;
 
-//ExitInstance.Tick();
+   ExitInstance.Tick();
    EntryInstance.Tick();
   }
 //+------------------------------------------------------------------+
