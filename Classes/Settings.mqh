@@ -4,29 +4,26 @@
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
 extern bool             PrefSettings = true;
-
-sinput string           Risk_Label = ""; //Risk ------------------------------------------------------------------------------------
-extern bool             RiskManagement = true;
-extern double           MinimumLotSize = 0.1;
-extern double           Risk = 0.01;
+extern bool             RiskManagement = true; //Risk Management
+extern double           Risk = 0.01; // Risk
 
 sinput string           ATR_Label = ""; //ATR ------------------------------------------------------------------------------------
-extern int              ATR_Period = 14;
-extern double           SL_Multiplier = 0.5;
-extern double           TP_Multiplier = 0.5;
+extern int              ATR_Period = 14; //Period
+extern double           SL_Multiplier = 0.5; //SL Multiplier
+extern double           TP_Multiplier = 0.5; // TP Multiplier
 
 sinput string           Baseline_Label = ""; //Baseline ------------------------------------------------------------------------------------
-extern int              Baseline_Period = 21;
-extern double           Baseline_Levels = 0.00400;
+extern int              Baseline_Period = 21; //Period
+extern double           Baseline_Levels = 0.00400; //Levels
 
 sinput string           ConfirmationIndicator_Label = ""; //Confirmation ------------------------------------------------------------------------------------
-extern int              ConfirmationIndicator_Period = 21;
+extern int              ConfirmationIndicator_Period = 21; //Period
 
 sinput string           SecondConfirmationIndicator_Label = ""; //2nd Confirmation ------------------------------------------------------------------------------------
-extern int              SecondConfirmationIndicator_Period = 21;
+extern int              SecondConfirmationIndicator_Period = 21; //Period
 
 sinput string           VolumeIndicator_Label = ""; //Volume ------------------------------------------------------------------------------------
-extern double           VolumeIndicator_MinimumVolume = 0.03;
+extern double           VolumeIndicator_MinimumVolume = 0.03; //Minimum Volume
 
 
 //+------------------------------------------------------------------+
@@ -36,7 +33,6 @@ class Settings
   {
 public:
    bool              _RiskManagement;
-   double            _MinimumLotSize;
    double            _Risk;
 
    int               _ATR_Period;
@@ -57,7 +53,6 @@ public:
      {
       this._Risk = Risk;
       this._RiskManagement = RiskManagement;
-      this._MinimumLotSize = MinimumLotSize;
 
       this._ATR_Period = ATR_Period;
       this._TP_Multiplier = TP_Multiplier;
