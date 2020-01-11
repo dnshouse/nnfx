@@ -32,12 +32,12 @@ public:
 
       double level = iMA(NULL, this._timeframe, this._period, 0, MODE_SMMA, PRICE_CLOSE, offset);
 
-      if(Ask > level + this._levels)
+      if(Ask > (level + this._levels))
         {
          return _BUY;
         }
 
-      if(Bid < level - this._levels)
+      if(Bid < (level - this._levels))
         {
          return _SELL;
         }

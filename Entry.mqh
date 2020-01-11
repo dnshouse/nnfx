@@ -34,10 +34,30 @@ public:
       SettingsInstance = new Settings();
       MoneyManagementInstance = new MoneyManagement();
 
-      MovingAverageInstance = new MovingAverage(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._Baseline_Period, SettingsInstance._Baseline_Levels);
-      AroonUpAndDownInstance = new AroonUpAndDown(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._ConfirmationIndicator_Period);
-      ChaikinMoneyFlowInstance = new ChaikinMoneyFlow(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset, SettingsInstance._SecondConfirmationIndicator_Period);
-      AbsoluteStrengthOscillatorInstance = new AbsoluteStrengthOscillator(SettingsInstance._IndicatorsTimeframe, SettingsInstance._IndicatorsOffset);
+      MovingAverageInstance = new MovingAverage(
+         SettingsInstance._IndicatorsTimeframe,
+         SettingsInstance._IndicatorsOffset,
+         SettingsInstance._Baseline_Period,
+         SettingsInstance._Baseline_Levels
+      );
+
+      AroonUpAndDownInstance = new AroonUpAndDown(
+         SettingsInstance._IndicatorsTimeframe,
+         SettingsInstance._IndicatorsOffset,
+         SettingsInstance._ConfirmationIndicator_Period
+      );
+
+      ChaikinMoneyFlowInstance = new ChaikinMoneyFlow(
+         SettingsInstance._IndicatorsTimeframe,
+         SettingsInstance._IndicatorsOffset,
+         SettingsInstance._SecondConfirmationIndicator_Period,
+         SettingsInstance._VolumeIndicator_MinimumVolume
+      );
+
+      AbsoluteStrengthOscillatorInstance = new AbsoluteStrengthOscillator(
+         SettingsInstance._IndicatorsTimeframe,
+         SettingsInstance._IndicatorsOffset
+      );
      }
 
    void             ~Entry()
@@ -57,12 +77,18 @@ public:
 
       if(this._currentSignal != this._lastSignal)
         {
-         if(OrdersTotal() == 0 && this._currentSignal == _BUY)
+         if(
+            //OrdersTotal() == 0 &&
+            this._currentSignal == _BUY
+         )
            {
             MoneyManagementInstance.Buy();
            }
 
-         if(OrdersTotal() == 0 && this._currentSignal == _SELL)
+         if(
+            //OrdersTotal() == 0 &&
+            this._currentSignal == _SELL
+         )
            {
             MoneyManagementInstance.Sell();
            }
@@ -73,12 +99,22 @@ public:
 
    int               GetSignal()
      {
-      if(MovingAverageInstance.GetState() == _BUY && AroonUpAndDownInstance.GetSignal() == _BUY && ChaikinMoneyFlowInstance.GetState() == _BUY && AbsoluteStrengthOscillatorInstance.GetState() == _BUY)
+      if(AroonUpAndDownInstance.GetSignal() == _BUY && ChaikinMoneyFlowInstance.GetState() == _BUY)
         {
          return _BUY;
         }
 
-      if(MovingAverageInstance.GetState() == _SELL && AroonUpAndDownInstance.GetSignal() == _SELL && ChaikinMoneyFlowInstance.GetState() == _SELL && AbsoluteStrengthOscillatorInstance.GetState() == _SELL)
+      if(ChaikinMoneyFlowInstance.GetSignal() == _BUY && AroonUpAndDownInstance.GetState() == _BUY)
+        {
+         return _BUY;
+        }
+
+      if(AroonUpAndDownInstance.GetSignal() == _SELL && ChaikinMoneyFlowInstance.GetState() == _SELL)
+        {
+         return _SELL;
+        }
+
+      if(ChaikinMoneyFlowInstance.GetSignal() == _SELL && AroonUpAndDownInstance.GetState() == _SELL)
         {
          return _SELL;
         }

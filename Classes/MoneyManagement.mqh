@@ -88,25 +88,23 @@ public:
       return NormalizeDouble(lot, lotDigits);
      }
 
-   void              Sell()
-     {
-      double tp = NormalizeDouble(ShortTP(), Digits);
-      double sl = NormalizeDouble(ShortSL(), Digits);
-
-      //      Print("Tp : ", tp);
-      //      Print("Sl : ", sl);
-      //      Print("STOPLEVEL : ", MarketInfo(Symbol(), MODE_STOPLEVEL));
-
-      int order = OrderSend(Symbol(), OP_SELL, LotSize(), Bid, 3, sl, tp, "Tester", MAGICMA, 0, Red);
-      return;
-     }
-
    void              Buy()
      {
       double tp = NormalizeDouble(LongTP(), Digits);
       double sl = NormalizeDouble(LongSL(), Digits);
 
       int order = OrderSend(Symbol(), OP_BUY, LotSize(), Ask, 3, sl, tp, "Tester", MAGICMA, 0, Blue);
+      return;
+     }
+
+   void              Sell()
+     {
+      double tp = NormalizeDouble(ShortTP(), Digits);
+      double sl = NormalizeDouble(ShortSL(), Digits);
+
+      //      Print("STOPLEVEL : ", MarketInfo(Symbol(), MODE_STOPLEVEL));
+
+      int order = OrderSend(Symbol(), OP_SELL, LotSize(), Bid, 3, sl, tp, "Tester", MAGICMA, 0, Red);
       return;
      }
 

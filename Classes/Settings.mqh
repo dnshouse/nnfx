@@ -75,6 +75,11 @@ public:
         {
          if((Symbol() == "AUDCAD") || (Symbol() == "AUDCADmicro"))
            {
+            this._TP_Multiplier = 6;
+            this._SL_Multiplier = 1;
+            this._ConfirmationIndicator_Period = 8;
+            this._SecondConfirmationIndicator_Period = 9;
+            this._VolumeIndicator_MinimumVolume = 0.06;
            }
 
          if((Symbol() == "AUDCHF") || (Symbol() == "AUDCHFmicro"))
