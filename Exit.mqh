@@ -53,14 +53,15 @@ public:
 
    void              Tick()
      {
-      this._currentSignal = AroonUpAndDownInstance.GetState();
+      //if(AroonUpAndDownInstance.GetState(1) != AroonUpAndDownInstance.GetState(2))
+      //this.MoneyManagementInstance.CloseAll();
 
-      if(this._currentSignal != this._lastSignal)
-        {
-         this.MoneyManagementInstance.CloseAll();
-        }
+      //if(MovingAverageInstance.GetState(1) != AroonUpAndDownInstance.GetState(2))
+      //this.MoneyManagementInstance.CloseAll();
 
-      this._lastSignal = this._currentSignal;
+
+      //if(ChaikinMoneyFlowInstance.GetState(1) != ChaikinMoneyFlowInstance.GetState(2))
+      //this.MoneyManagementInstance.CloseAll();
      }
   };
 //+------------------------------------------------------------------+

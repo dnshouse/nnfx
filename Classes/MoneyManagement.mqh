@@ -14,9 +14,14 @@ private:
    bool              _RiskManagement;
    double            _Risk;
 
+   int               _StopLoss;
+   int               _TargetProfit;
+
+   bool              _ATREnabled;
    int               _ATRTimeframe;
    int               _ATROffset;
    int               _ATRPeriod;
+
    double            _SLMultiplier;
    double            _TPMultiplier;
 
@@ -28,9 +33,14 @@ public:
       this._RiskManagement = settings._RiskManagement;
       this._Risk = settings._Risk;
 
+      this._StopLoss = settings._StopLoss;
+      this._TargetProfit = settings._TargetProfit;
+
+      this._ATREnabled = settings._ATR_Enabled;
       this._ATRTimeframe = settings._IndicatorsTimeframe;
       this._ATROffset = settings._IndicatorsOffset;
       this._ATRPeriod = settings._ATR_Period;
+
       this._SLMultiplier = settings._SL_Multiplier;
       this._TPMultiplier = settings._TP_Multiplier;
 
@@ -42,33 +52,108 @@ public:
 
      }
 
-   double            LongTP()
-     {
-      double tp = (Ask + (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._TPMultiplier));
-      return tp;
-     }
-
    double            LongSL()
      {
-      double sl = (Bid - (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._SLMultiplier));
-      return sl;
-     }
+      double sl;
+      double atr;
 
-   double            ShortTP()
-     {
-      double tp = (Bid - (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._TPMultiplier));
-      return tp;
+      if(this._ATREnabled == true)
+        {
+         atr = (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._SLMultiplier) / Point / 10;
+        }
+      else
+        {
+         atr = this._StopLoss;
+        }
+
+      if(atr > (MarketInfo(Symbol(), MODE_STOPLEVEL) + MarketInfo(Symbol(), MODE_SPREAD)))
+        {
+         sl = (Bid - (atr * Point));
+        }
+      else
+        {
+         sl = (Bid - (MarketInfo(Symbol(), MODE_STOPLEVEL)) * Point);
+        }
+
+      return sl;
      }
 
    double            ShortSL()
      {
-      double sl = (Ask + (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._SLMultiplier));
+      double sl;
+      double atr;
+
+      if(this._ATREnabled == true)
+        {
+         atr = (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._SLMultiplier) / Point / 10;
+        }
+      else
+        {
+         atr = this._StopLoss;
+        }
+
+      if(atr > (MarketInfo(Symbol(), MODE_STOPLEVEL)))
+        {
+         sl = (Ask + (atr * Point));
+        }
+      else
+        {
+         sl = (Ask + (MarketInfo(Symbol(), MODE_STOPLEVEL)) * Point);
+        }
+
       return sl;
+     }
+
+   double            LongTP()
+     {
+      double tp;
+      double atr;
+
+      if(this._ATREnabled == true)
+        {
+         atr = (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._TPMultiplier) / Point / 10;
+        }
+      else
+        {
+         atr = this._TargetProfit;
+        }
+
+      tp = (Ask + (atr * Point));
+      return tp;
+     }
+
+   double            ShortTP()
+     {
+      double tp;
+      double atr;
+
+      if(this._ATREnabled == true)
+        {
+         atr = (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._TPMultiplier) / Point / 10;
+        }
+      else
+        {
+         atr = this._TargetProfit;
+        }
+
+      tp = (Bid - (atr * Point));
+      return tp;
      }
 
    double            LotSize()
      {
-      double riskAmountPerPip = (AccountFreeMargin() * this._Risk) / ((iATR(NULL, this._ATRTimeframe, this._ATRPeriod, this._ATROffset) * this._SLMultiplier) / Point);
+      double atr;
+
+      if(this._ATREnabled == true)
+        {
+         atr = (iATR(NULL,this._ATRTimeframe,this._ATRPeriod,this._ATROffset) * this._SLMultiplier) / Point / 10;
+        }
+      else
+        {
+         atr = this._StopLoss + MarketInfo(Symbol(), MODE_SPREAD);
+        }
+
+      double riskAmountPerPip = (AccountFreeMargin() * this._Risk) / atr;
       double lot = (riskAmountPerPip * (MarketInfo(Symbol(), MODE_LOTSIZE) / MarketInfo(Symbol(), MODE_TICKVALUE))) / MarketInfo(Symbol(), MODE_LOTSIZE);
       double minlot = MarketInfo(Symbol(), MODE_MINLOT);
       double maxlot = MarketInfo(Symbol(), MODE_MAXLOT);
@@ -101,8 +186,6 @@ public:
      {
       double tp = NormalizeDouble(ShortTP(), Digits);
       double sl = NormalizeDouble(ShortSL(), Digits);
-
-      //      Print("STOPLEVEL : ", MarketInfo(Symbol(), MODE_STOPLEVEL));
 
       int order = OrderSend(Symbol(), OP_SELL, LotSize(), Bid, 3, sl, tp, "Tester", MAGICMA, 0, Red);
       return;

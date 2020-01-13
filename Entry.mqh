@@ -77,12 +77,17 @@ public:
 
       if(this._currentSignal != this._lastSignal)
         {
+         if(this._currentSignal != 0)
+           {
+            this.MoneyManagementInstance.CloseAll();
+           }
+
          if(
             //OrdersTotal() == 0 &&
             this._currentSignal == _BUY
          )
            {
-            MoneyManagementInstance.Buy();
+            this.MoneyManagementInstance.Buy();
            }
 
          if(
@@ -90,7 +95,7 @@ public:
             this._currentSignal == _SELL
          )
            {
-            MoneyManagementInstance.Sell();
+            this.MoneyManagementInstance.Sell();
            }
         }
 
@@ -99,22 +104,22 @@ public:
 
    int               GetSignal()
      {
-      if(AroonUpAndDownInstance.GetSignal() == _BUY && ChaikinMoneyFlowInstance.GetState() == _BUY)
+      if(AroonUpAndDownInstance.GetSignal() == _BUY && MovingAverageInstance.GetState() == _BUY && ChaikinMoneyFlowInstance.GetState() == _BUY)
         {
          return _BUY;
         }
 
-      if(ChaikinMoneyFlowInstance.GetSignal() == _BUY && AroonUpAndDownInstance.GetState() == _BUY)
+      if(ChaikinMoneyFlowInstance.GetSignal() == _BUY && MovingAverageInstance.GetState() == _BUY && AroonUpAndDownInstance.GetState() == _BUY)
         {
          return _BUY;
         }
 
-      if(AroonUpAndDownInstance.GetSignal() == _SELL && ChaikinMoneyFlowInstance.GetState() == _SELL)
+      if(AroonUpAndDownInstance.GetSignal() == _SELL && MovingAverageInstance.GetState() == _SELL && ChaikinMoneyFlowInstance.GetState() == _SELL)
         {
          return _SELL;
         }
 
-      if(ChaikinMoneyFlowInstance.GetSignal() == _SELL && AroonUpAndDownInstance.GetState() == _SELL)
+      if(ChaikinMoneyFlowInstance.GetSignal() == _SELL && MovingAverageInstance.GetState() == _SELL && AroonUpAndDownInstance.GetState() == _SELL)
         {
          return _SELL;
         }

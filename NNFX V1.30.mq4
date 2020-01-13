@@ -43,7 +43,7 @@ void OnTick()
    if(Volume[0] > 1)
       return;
 
-   //ExitInstance.Tick();
+   ExitInstance.Tick();
    EntryInstance.Tick();
   }
 //+------------------------------------------------------------------+
