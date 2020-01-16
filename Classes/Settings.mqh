@@ -3,9 +3,10 @@
 //|                                     Copyright 2019, DA Solutions |
 //|                                      https://www.dasolutions.org |
 //+------------------------------------------------------------------+
+extern bool             LiveMode = true;
 extern bool             PrefSettings = true;
 extern bool             RiskManagement = true; //Risk Management
-extern double           Risk = 0.01; // Risk
+extern double           Risk = 0.005; // Risk
 
 extern int              StopLoss = 200;
 extern int              TargetProfit = 300;
@@ -29,13 +30,13 @@ extern int              SecondConfirmationIndicator_Period = 21; //Period
 sinput string           VolumeIndicator_Label = ""; //Volume ------------------------------------------------------------------------------------
 extern double           VolumeIndicator_MinimumVolume = 0.03; //Minimum Volume
 
-
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 class Settings
   {
 public:
+   bool              _LiveMode;
    bool              _RiskManagement;
    double            _Risk;
 
@@ -54,11 +55,12 @@ public:
    int               _SecondConfirmationIndicator_Period;
    double            _VolumeIndicator_MinimumVolume;
 
-   int               _IndicatorsOffset;
    int               _IndicatorsTimeframe;
+   int               _IndicatorsOffset;
 
    void              Settings()
      {
+      this._LiveMode = LiveMode;
       this._Risk = Risk;
       this._RiskManagement = RiskManagement;
 
@@ -77,8 +79,16 @@ public:
       this._SecondConfirmationIndicator_Period = SecondConfirmationIndicator_Period;
       this._VolumeIndicator_MinimumVolume = VolumeIndicator_MinimumVolume;
 
-      this._IndicatorsTimeframe = PERIOD_CURRENT;
-      this._IndicatorsOffset = 1;
+      if(this._LiveMode == true)
+        {
+         this._IndicatorsTimeframe = PERIOD_D1;
+         this._IndicatorsOffset = 0;
+        }
+      else
+        {
+         this._IndicatorsTimeframe = PERIOD_CURRENT;
+         this._IndicatorsOffset = 1;
+        }
 
       if(PrefSettings == false)
         {

@@ -9,9 +9,11 @@
 #define _BUY      1
 #define _SELL     2
 
+#include "Classes/Settings.mqh"
 #include "Exit.mqh"
 #include "Entry.mqh"
 
+Settings* SettingsInstance;
 Exit* ExitInstance;
 Entry* EntryInstance;
 
@@ -20,6 +22,7 @@ Entry* EntryInstance;
 //+------------------------------------------------------------------+
 int OnInit()
   {
+   SettingsInstance = new Settings();
    ExitInstance = new Exit();
    EntryInstance = new Entry();
    return(INIT_SUCCEEDED);
@@ -29,6 +32,7 @@ int OnInit()
 //+------------------------------------------------------------------+
 void OnDeinit(const int reason)
   {
+   delete(SettingsInstance);
    delete(ExitInstance);
    delete(EntryInstance);
   }
@@ -42,6 +46,11 @@ void OnTick()
 
    if(Volume[0] > 1)
       return;
+      
+   if(SettingsInstance._LiveMode == true && Hour() != 23) return;
+   if(SettingsInstance._LiveMode == true && Minute() < 45) return;
+   
+   if(SettingsInstance._LiveMode == false && Hour() != 0) return;   
 
    ExitInstance.Tick();
    EntryInstance.Tick();
