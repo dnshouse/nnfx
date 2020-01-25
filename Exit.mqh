@@ -59,7 +59,6 @@ public:
       //if(MovingAverageInstance.GetState(1) != AroonUpAndDownInstance.GetState(2))
       //this.MoneyManagementInstance.CloseAll();
 
-
       //if(ChaikinMoneyFlowInstance.GetState(1) != ChaikinMoneyFlowInstance.GetState(2))
       //this.MoneyManagementInstance.CloseAll();
      }

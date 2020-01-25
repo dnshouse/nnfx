@@ -82,18 +82,12 @@ public:
             this.MoneyManagementInstance.CloseAll();
            }
 
-         if(
-            //OrdersTotal() == 0 &&
-            this._currentSignal == _BUY
-         )
+         if(this._currentSignal == _BUY)
            {
             this.MoneyManagementInstance.Buy();
            }
 
-         if(
-            //OrdersTotal() == 0 &&
-            this._currentSignal == _SELL
-         )
+         if(this._currentSignal == _SELL)
            {
             this.MoneyManagementInstance.Sell();
            }
