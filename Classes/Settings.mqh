@@ -322,10 +322,32 @@ public:
 
          if((Symbol() == "GBPAUD") || (Symbol() == "GBPAUDmicro"))
            {
+            this._StopLoss = 600;
+            this._TargetProfit = 1000;
+
+            this._ATR_Enabled = false;
+
+            this._Baseline_Period = 19;
+            this._Baseline_Levels = 0.005;
+
+            this._ConfirmationIndicator_Period = 9;
+            this._SecondConfirmationIndicator_Period = 19;
+            this._VolumeIndicator_MinimumVolume = 0.06;
            }
 
          if((Symbol() == "GBPCAD") || (Symbol() == "GBPCADmicro"))
            {
+            this._StopLoss = 950;
+            this._TargetProfit = 850;
+
+            this._ATR_Enabled = false;
+
+            this._Baseline_Period = 8;
+            this._Baseline_Levels = 0.006;
+
+            this._ConfirmationIndicator_Period = 17;
+            this._SecondConfirmationIndicator_Period = 16;
+            this._VolumeIndicator_MinimumVolume = 0.03;
            }
 
          if((Symbol() == "GBPCHF") || (Symbol() == "GBPCHFmicro"))
@@ -360,6 +382,17 @@ public:
 
          if((Symbol() == "GBPNZD") || (Symbol() == "GBPNZDmicro"))
            {
+            this._StopLoss = 900;
+            this._TargetProfit = 900;
+
+            this._ATR_Enabled = false;
+
+            this._Baseline_Period = 24;
+            this._Baseline_Levels = 0.001;
+
+            this._ConfirmationIndicator_Period = 25;
+            this._SecondConfirmationIndicator_Period = 16;
+            this._VolumeIndicator_MinimumVolume = 0.07;
            }
 
          if((Symbol() == "GBPUSD") || (Symbol() == "GBPUSDmicro"))
@@ -379,10 +412,32 @@ public:
 
          if((Symbol() == "NZDCAD") || (Symbol() == "NZDCADmicro"))
            {
+            this._StopLoss = 450;
+            this._TargetProfit = 950;
+
+            this._ATR_Enabled = false;
+
+            this._Baseline_Period = 19;
+            this._Baseline_Levels = 0.001;
+
+            this._ConfirmationIndicator_Period = 24;
+            this._SecondConfirmationIndicator_Period = 8;
+            this._VolumeIndicator_MinimumVolume = 0.02;
            }
 
          if((Symbol() == "NZDCHF") || (Symbol() == "NZDCHFmicro"))
            {
+            this._StopLoss = 150;
+            this._TargetProfit = 850;
+
+            this._ATR_Enabled = false;
+
+            this._Baseline_Period = 14;
+            this._Baseline_Levels = 0.002;
+
+            this._ConfirmationIndicator_Period = 25;
+            this._SecondConfirmationIndicator_Period = 20;
+            this._VolumeIndicator_MinimumVolume = 0.05;
            }
 
          if((Symbol() == "NZDJPY") || (Symbol() == "NZDJPYmicro"))

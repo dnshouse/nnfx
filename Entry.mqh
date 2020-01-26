@@ -77,18 +77,15 @@ public:
 
       if(this._currentSignal != this._lastSignal)
         {
-         if(this._currentSignal != 0)
-           {
-            this.MoneyManagementInstance.CloseAll();
-           }
-
          if(this._currentSignal == _BUY)
            {
+            this.MoneyManagementInstance.CloseAll();
             this.MoneyManagementInstance.Buy();
            }
 
          if(this._currentSignal == _SELL)
            {
+            this.MoneyManagementInstance.CloseAll();
             this.MoneyManagementInstance.Sell();
            }
         }
